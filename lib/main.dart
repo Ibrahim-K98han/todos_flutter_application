@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todos_flutter_application/screens/auth/login_screen.dart';
+import 'package:todos_flutter_application/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,11 +14,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+        ),
         useMaterial3: true,
         fontFamily: "Poppins",
       ),
-      home: LoginScreen(),
+      initialRoute: Routes.login,
+      getPages: Routes.routes,
     );
   }
 }

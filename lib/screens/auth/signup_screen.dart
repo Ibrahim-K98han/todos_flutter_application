@@ -1,13 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todos_flutter_application/routes.dart';
-import 'package:todos_flutter_application/widgets/custom_textfield.dart';
 
+import '../../routes.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/custom_textfield.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatelessWidget {
+  const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 120,
+                height: 50,
               ),
               const Align(
                 alignment: Alignment.center,
@@ -33,7 +33,25 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 50,
+                height: 30,
+              ),
+              const CustomTextField(
+                hint: 'Name',
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const CustomTextField(
+                hint: 'Address',
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const CustomTextField(
+                hint: 'Contact',
+              ),
+              const SizedBox(
+                height: 10,
               ),
               const CustomTextField(
                 hint: 'Email',
@@ -46,10 +64,17 @@ class LoginScreen extends StatelessWidget {
                 obscureText: true,
               ),
               const SizedBox(
+                height: 10,
+              ),
+              const CustomTextField(
+                hint: 'Confirm Password',
+                obscureText: true,
+              ),
+              const SizedBox(
                 height: 20,
               ),
               CustomButton(
-                label: 'Login',
+                label: 'Sign Up',
                 onPressed: () {},
               ),
               const SizedBox(
@@ -64,13 +89,13 @@ class LoginScreen extends StatelessWidget {
                   ),
                   children: [
                     const TextSpan(
-                      text: 'Don\'t have an account? ',
+                      text: 'Already have an account? ',
                     ),
                     TextSpan(
-                      text: 'Sign Up',
+                      text: 'Login',
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Get.toNamed(Routes.signup);
+                          Get.toNamed(Routes.login);
                         },
                       style: const TextStyle(
                         color: Color(0xff6b7afc),
