@@ -102,7 +102,7 @@ class SignupScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  ],
+                  ], 
                 ),
               ),
             ],

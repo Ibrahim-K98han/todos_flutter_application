@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:todos_flutter_application/screens/auth/login_screen.dart';
 import 'package:todos_flutter_application/screens/auth/signup_screen.dart';
+import 'package:todos_flutter_application/screens/home/home_screen.dart';
 
 class Routes {
   static const String login = '/login';
@@ -15,6 +16,10 @@ class Routes {
     GetPage(
       name: Routes.signup,
       page: () => SignupScreen(),
+    ),
+    GetPage(
+      name: Routes.home,
+      page: () => HomeScreen(),
     ),
   ];
 }
