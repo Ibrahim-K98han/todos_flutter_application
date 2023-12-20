@@ -75,4 +75,43 @@ class TodoController extends GetxController {
     }
     update();
   }
+
+  editTodo(id) async {
+    var user = await SharedPrefs().getUser();
+    UserModel userModel = UserModel.fromJson(json.decode(user));
+    var response = await http.post(Uri.parse('${baseurl}edit_todo.php'), body: {
+      'id': id,
+      'user_id': userModel.id,
+      'title': titleController.text,
+      'description': descriptionController.text,
+    });
+    var res = await json.decode(response.body);
+    if (res['success']) {
+      customSnackbar('Success', res['message'], 'success');
+      titleController.text = '';
+      descriptionController.text = '';
+      fetchMyTodos();
+    } else {
+      customSnackbar('Error', res['message'], 'error');
+    }
+    update();
+  }
+
+  deleteTodo(id) async {
+    var user = await SharedPrefs().getUser();
+    UserModel userModel = UserModel.fromJson(json.decode(user));
+    var response =
+        await http.post(Uri.parse('${baseurl}delete_todo.php'), body: {
+      'user_id': userModel.id,
+      'id': id,
+    });
+    var res = await json.decode(response.body);
+    if (res['success']) {
+      customSnackbar('Success', res['message'], 'success');
+      fetchMyTodos();
+    } else {
+      customSnackbar('Error', res['message'], 'error');
+    }
+    update();
+  }
 }
