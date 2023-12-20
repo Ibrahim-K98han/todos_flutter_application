@@ -3,7 +3,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:todos_flutter_application/controllers/todo_controller.dart';
+import 'package:todos_flutter_application/widgets/custom_button.dart';
 import 'package:todos_flutter_application/widgets/custom_search.dart';
+import 'package:todos_flutter_application/widgets/custom_textfield.dart';
+import 'package:todos_flutter_application/widgets/loader.dart';
 
 import '../../models/all_todo_model.dart';
 
@@ -26,7 +29,14 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => const Dialog(
+                  child: ManipulateTodo(),
+                ),
+              );
+            },
             icon: const FaIcon(
               FontAwesomeIcons.plus,
               color: Colors.black,
@@ -114,14 +124,28 @@ class TodoTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            todo.title!,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 20,
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                todo.title!,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                todo.date!,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
           ),
           Text(
             todo.description!,
@@ -133,6 +157,61 @@ class TodoTile extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class ManipulateTodo extends StatelessWidget {
+  const ManipulateTodo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: GetBuilder<TodoController>(builder: (controller) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Add Todo',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            CustomTextField(
+              hint: 'Title',
+              controller: controller.titleController,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            CustomTextField(
+              hint: 'Description',
+              maxLines: 5,
+              controller: controller.descriptionController,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            CustomButton(
+              label: 'Add',
+              onPressed: () async {
+                await Get.showOverlay(
+                  asyncFunction: () => controller.addTodo(),
+                  loadingWidget: const Loader(),
+                );
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      }),
     );
   }
 }
