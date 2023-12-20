@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -41,7 +40,8 @@ class LoginController extends GetxController {
     } else if (passwordController.text.isEmpty) {
       customSnackbar('Error', 'Password is required', 'error');
     } else {
-      Get.showOverlay(asyncFunction: () => login(), loadingWidget: Loader());
+      Get.showOverlay(
+          asyncFunction: () => login(), loadingWidget: const Loader());
     }
   }
 

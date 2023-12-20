@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:todos_flutter_application/controllers/todo_controller.dart';
 import 'package:todos_flutter_application/widgets/custom_search.dart';
 
+import '../../models/all_todo_model.dart';
+
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+  final todoController = Get.put(TodoController());
 
   @override
   Widget build(BuildContext context) {
@@ -31,54 +36,63 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            CustomSearch(
-              onChanged: (val) {},
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: List.generate(
-                    8,
-                    (index) => Slidable(
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {},
-                            backgroundColor: const Color(0xff8394FF),
-                            foregroundColor: Colors.white,
-                            icon: FontAwesomeIcons.pencil,
-                            label: 'Edit',
-                          ),
-                          SlidableAction(
-                            onPressed: (context) {},
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            icon: FontAwesomeIcons.trash,
-                            label: 'Delete',
-                          )
-                        ],
-                      ),
-                      child: const TodoTile(),
-                    ),
-                  ).toList(),
-                ),
+        child: GetBuilder<TodoController>(builder: (controller) {
+          return Column(
+            children: [
+              CustomSearch(
+                onChanged: (val) {
+                  controller.search(val);
+                },
               ),
-            )
-          ],
-        ),
+              const SizedBox(
+                height: 30,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: controller.filteredTodo
+                        .map(
+                          (todo) => Slidable(
+                            endActionPane: ActionPane(
+                              motion: const ScrollMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (context) {},
+                                  backgroundColor: const Color(0xff8394FF),
+                                  foregroundColor: Colors.white,
+                                  icon: FontAwesomeIcons.pencil,
+                                  label: 'Edit',
+                                ),
+                                SlidableAction(
+                                  onPressed: (context) {},
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  icon: FontAwesomeIcons.trash,
+                                  label: 'Delete',
+                                )
+                              ],
+                            ),
+                            child: TodoTile(
+                              todo: todo,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              )
+            ],
+          );
+        }),
       ),
     );
   }
 }
 
 class TodoTile extends StatelessWidget {
-  const TodoTile({super.key});
+  TodoTile({super.key, required this.todo});
+
+  final Todo todo;
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +115,8 @@ class TodoTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Title',
-            style: TextStyle(
+            todo.title!,
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 20,
               color: Colors.black,
@@ -110,8 +124,8 @@ class TodoTile extends StatelessWidget {
             ),
           ),
           Text(
-            'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.',
-            style: TextStyle(
+            todo.description!,
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
               color: Colors.grey,
