@@ -36,7 +36,7 @@ class CustomButton extends StatelessWidget {
           label,
           style: const TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 20,
+            fontSize: 18,
             color: Colors.white,
             fontWeight: FontWeight.w600,
           ),

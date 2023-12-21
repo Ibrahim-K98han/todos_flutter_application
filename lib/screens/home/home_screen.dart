@@ -3,7 +3,12 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:todos_flutter_application/controllers/todo_controller.dart';
+import 'package:todos_flutter_application/routes.dart';
+import 'package:todos_flutter_application/utils/shared_prefs.dart';
+import 'package:todos_flutter_application/widgets/custom_button.dart';
 import 'package:todos_flutter_application/widgets/custom_search.dart';
+import 'package:todos_flutter_application/widgets/custom_textfield.dart';
+import 'package:todos_flutter_application/widgets/loader.dart';
 
 import '../../models/all_todo_model.dart';
 
@@ -16,7 +21,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'TODO',
+          'TASKS',
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 20,
@@ -26,9 +31,58 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => const Dialog(
+                  child: ManipulateTodo(),
+                ),
+              );
+            },
             icon: const FaIcon(
               FontAwesomeIcons.plus,
+              color: Colors.black,
+            ),
+          ),
+          IconButton(
+            onPressed: () async {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Logout?'),
+                  content: Text('Are you sure you want to logout?'),
+                  actions: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      onPressed: () async {
+                        await SharedPrefs().removeUser();
+                        Get.offAllNamed(Routes.login);
+                      },
+                      child: const Text(
+                        'Confirm',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+            icon: const FaIcon(
+              FontAwesomeIcons.arrowRightFromBracket,
               color: Colors.black,
             ),
           )
@@ -57,14 +111,71 @@ class HomeScreen extends StatelessWidget {
                               motion: const ScrollMotion(),
                               children: [
                                 SlidableAction(
-                                  onPressed: (context) {},
+                                  onPressed: (context) {
+                                    controller.titleController.text =
+                                        todo.title!;
+                                    controller.descriptionController.text =
+                                        todo.description!;
+                                    controller.update();
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => Dialog(
+                                        child: ManipulateTodo(
+                                          edit: true,
+                                          id: todo.id!,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   backgroundColor: const Color(0xff8394FF),
                                   foregroundColor: Colors.white,
                                   icon: FontAwesomeIcons.pencil,
                                   label: 'Edit',
                                 ),
                                 SlidableAction(
-                                  onPressed: (context) {},
+                                  onPressed: (context) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text('Delete Todo?'),
+                                        content: const Text(
+                                            'Are you sure you want to delete this todo?'),
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.green,
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text(
+                                              'Cancel',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                            ),
+                                            onPressed: () async {
+                                              await Get.showOverlay(
+                                                asyncFunction: () => controller
+                                                    .deleteTodo(todo.id),
+                                                loadingWidget: const Loader(),
+                                              );
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text(
+                                              'Confirm',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
                                   backgroundColor: Colors.red,
                                   foregroundColor: Colors.white,
                                   icon: FontAwesomeIcons.trash,
@@ -114,14 +225,28 @@ class TodoTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            todo.title!,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 20,
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                todo.title!,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                todo.date!,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
           ),
           Text(
             todo.description!,
@@ -133,6 +258,75 @@ class TodoTile extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class ManipulateTodo extends StatelessWidget {
+  const ManipulateTodo({
+    super.key,
+    this.edit = false,
+    this.id = '',
+  });
+  final bool edit;
+  final String id;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: GetBuilder<TodoController>(builder: (controller) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "${edit ? "Edit" : "Add"} Todo",
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            CustomTextField(
+              hint: 'Title',
+              controller: controller.titleController,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            CustomTextField(
+              hint: 'Description',
+              maxLines: 5,
+              controller: controller.descriptionController,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            CustomButton(
+              label: edit ? 'Edit' : 'Add',
+              onPressed: () async {
+                if (!edit) {
+                  await Get.showOverlay(
+                    asyncFunction: () => controller.addTodo(),
+                    loadingWidget: const Loader(),
+                  );
+                } else {
+                  await Get.showOverlay(
+                    asyncFunction: () => controller.editTodo(id),
+                    loadingWidget: const Loader(),
+                  );
+                }
+
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      }),
     );
   }
 }
