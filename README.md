@@ -1,17 +1,17 @@
 
-#Full Stack My Tasks apps...
+# Full Stack My Tasks apps...
 
 
-##Apps Details 
-Initially the user has to register, and then can log in.
+## Apps Details 
+Initially, the user has to register and then can log in.
 After login home page will show where all tasks will show.
 A new task can be added by clicking on the add button which will show on the home page.
 By moving the task to the left, 2 buttons will appear through which the user can delete and update the task.
-##Uses Technology
+## Uses Technology
 Flutter, Getx, and PHP.
-##Apps Feature
+## Apps Feature
 Login, Registration, Show, Add, Edit and Delete Tasks.
-##Uses Package
+## Uses Package
 HTTP, get, flutter_slidable, font_awesome_flutter, shared_preferences, Lottie.
 
 
