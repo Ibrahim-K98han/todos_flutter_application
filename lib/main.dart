@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: "Poppins",
       ),
-      initialRoute: Routes.login,
+      initialRoute: Routes.splash,
       getPages: Routes.routes,
     );
   }

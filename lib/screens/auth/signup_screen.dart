@@ -27,9 +27,9 @@ class SignupScreen extends StatelessWidget {
                 const Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'My TODO',
+                    'MY TASKS',
                     style: TextStyle(
-                      fontSize: 54,
+                      fontSize: 40,
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
                     ),
@@ -95,7 +95,7 @@ class SignupScreen extends StatelessWidget {
                   TextSpan(
                     style: const TextStyle(
                       fontFamily: 'Poppins',
-                      fontSize: 20,
+                      fontSize: 18,
                       color: Colors.grey,
                     ),
                     children: [

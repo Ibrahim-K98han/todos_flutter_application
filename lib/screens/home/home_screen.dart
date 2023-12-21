@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'TODO',
+          'TASKS',
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 20,
@@ -232,7 +232,7 @@ class TodoTile extends StatelessWidget {
                 todo.title!,
                 style: const TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
                 ),
