@@ -1,16 +1,14 @@
-# todos_flutter_application
 
-A new Flutter project.
+Full Stack My Tasks apps...
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+Apps Details: Initially the user has to register, and then can log in.
+After login home page will show where all tasks will show.
+A new task can be added by clicking on the add button which will show on the home page.
+By moving the task to the left, 2 buttons will appear through which the user can delete and update the task.
+Uses Technology: Flutter, Getx, and PHP.
+Apps Feature: Login, Registration, Show, Add, Edit and Delete Tasks.
+Uses Package: HTTP, get, flutter_slidable, font_awesome_flutter, shared_preferences, Lottie.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![1](https://github.com/Ibrahim-K98han/todos_flutter_application/assets/37374226/b111db57-a891-4e9a-b2df-913e1fed0140)
